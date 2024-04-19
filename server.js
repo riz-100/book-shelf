@@ -11,7 +11,7 @@ const dashboard = require("./routes/dashboard");
 const verifyToken = require("./controllers/verifyToken");
 
 const app = express();
-app.use(cors()); //To allow Port3000 where frontend is hosted, to access port 3001 where backend is hosting.
+//app.use(cors()); //To allow Port3000 where frontend is hosted, to access port 3001 where backend is hosting.
 const PORT = process.env.PORT || 3001;
 
 app.use(bodyParser.urlencoded({ extended: true }));
