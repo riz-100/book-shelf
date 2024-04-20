@@ -3,7 +3,7 @@ const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
-// const cors = require("cors");
+//const cors = require("cors");
 
 const user = require("./routes/user");
 const myBookShelf = require("./routes/myBookShelf");
@@ -17,7 +17,6 @@ const PORT = process.env.PORT || 3001;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-//I've remove something from here that is useNewURIParser
 mongoose.connect(process.env.MONGODB_KEY, { useNewUrlParser: true }).then(
   () => {
     console.log("Connected to db...");
@@ -38,6 +37,11 @@ app.use("/users", user);
 app.use("/myBookShelf", verifyToken.verifyToken, myBookShelf);
 
 app.use("/dashboard", dashboard);
+
+// Configure a catch-all route that serves the main HTML file
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
 
 app.listen(PORT, () => {
   console.log("server at PORT " + PORT);
