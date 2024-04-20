@@ -26,8 +26,26 @@ exports.registerUser = (req, res) => {
             else {
               newUser.password = hash;
               newUser.save().then((user) => {
-                return res.json(user);
-              }); //.save method is given by Mongoose to save the data in mongodb
+                const payload = {
+                  id: user._id,
+                  name: user.name,
+                };
+                jwt.sign(
+                  payload,
+                  process.env.SECRET_KEY,
+                  { expiresIn: jwtExpireTime },
+                  (err, token) => {
+                    if (err) console.log("There is an error in JWT", err);
+                    else {
+                      res.json({
+                        success: true,
+                        token: `Bearer ${token}`,
+                        ...payload,
+                      });
+                    }
+                  }
+                );
+              });
             }
           });
         }
